@@ -46,6 +46,10 @@ bpftrace -e 'kprobe:do_nanosleep { $i = 1; unroll(5) { printf("i: %d\n", $i); $i
 
 bpftrace -e 'tracepoint:syscalls:sys_enter_read { @reads = count();
     if (args->count > 1024) { @large = count(); } }'
+
+bpftrace -e 'kprobe:do_sys_open /comm == "bash"/ { @[ustack] = count(); }'
+
+bpftrace -e 'BEGIN { printf("I got %d, %s (%d args)\n", $1, str($2), $#); }' 42 "hello"
 ```
 
 * comm 是current 进程名
@@ -72,3 +76,22 @@ bpftrace -e 'tracepoint:syscalls:sys_enter_read { @reads = count();
 * interval - timed output
 * software - kernel software events
 * hardware - processor-level events
+
+## 4. variables
+
+```
+@global_name
+@thread_local_variable_name[tid]
+$scratch_name
+
+bpftrace -e 'BEGIN { @start = nsecs; }
+    kprobe:do_nanosleep /@start != 0/ { printf("at %d ms: sleep\n", (nsecs - @start) / 1000000); }'
+
+bpftrace -e 'kprobe:do_nanosleep { @start[tid] = nsecs; }
+    kretprobe:do_nanosleep /@start[tid] != 0/ {
+        printf("slept for %d ms\n", (nsecs - @start[tid]) / 1000000); delete(@start[tid]); }'
+
+bpftrace -e 'kprobe:do_nanosleep { @start[tid] = nsecs; }
+    kretprobe:do_nanosleep /@start[tid] != 0/ { $delta = nsecs - @start[tid];
+        printf("slept for %d ms\n", $delta / 1000000); delete(@start[tid]); }'
+```
