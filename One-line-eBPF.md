@@ -13,7 +13,10 @@ linux v5.4 会出现 error asm ')' 的情况，但是v5.3 没有这种情况的�
 ```
 bpftrace -l  #显示全部trace
 bpftrace -l 'tracepoint:syscalls:sys_enter_*'
+bpftrace -lv 显示更详细的信息和参数
 ```
+
+详见 `list.txt` 和 `vlist.txt` 两个文件
 
 ## 2. execution
 
@@ -95,3 +98,46 @@ bpftrace -e 'kprobe:do_nanosleep { @start[tid] = nsecs; }
     kretprobe:do_nanosleep /@start[tid] != 0/ { $delta = nsecs - @start[tid];
         printf("slept for %d ms\n", $delta / 1000000); delete(@start[tid]); }'
 ```
+
+## 5. functions
+    - [1. Builtins](#1-builtins-1)
+    - [2. `printf()`: Print Formatted](#2-printf-Printing)
+    - [3. `time()`: Time](#3-time-time)
+    - [4. `join()`: Join](#4-join-join)
+    - [5. `str()`: Strings](#5-str-strings)
+    - [6. `ksym()`: Symbol Resolution, Kernel-Level](#6-ksym-symbol-resolution-kernel-level)
+    - [7. `usym()`: Symbol Resolution, User-Level](#7-usym-symbol-resolution-user-level)
+    - [8. `kaddr()`: Address Resolution, Kernel-Level](#8-kaddr-address-resolution-kernel-level)
+    - [9. `uaddr()`: Address Resolution, User-Level](#9-uaddr-address-resolution-user-level)
+    - [10. `reg()`: Registers](#10-reg-registers)
+    - [11. `system()`: System](#11-system-system)
+    - [12. `exit()`: Exit](#12-exit-exit)
+    - [13. `cgroupid()`: Resolve cgroup ID](#13-cgroupid-resolve-cgroup-id)
+    - [14. `ntop()`: Convert IP address data to text](#14-ntop-convert-ip-address-data-to-text)
+    - [15. `kstack()`: Stack Traces, Kernel](#15-kstack-stack-traces-kernel)
+    - [16. `ustack()`: Stack Traces, User](#16-ustack-stack-traces-user)
+    - [17. `cat()`: Print file content](#17-cat-print-file-content)
+    - [18. `signal()`: Send a signal to the current task](#18-signal-send-a-signal-to-current-task)
+    - [19. `strncmp()`: Compare first n characters of two strings](#19-strncmp-compare-first-n-characters-of-two-strings)
+    - [20. `override()`: Override return value](#20-override-override-return-value)
+    - [21. `buf()`: Buffers](#21-buf-buffers)
+    - [22. `sizeof()`: Size of type or expression](#22-sizeof-size-of-type-or-expression)
+
+
+## 6. map functions
+    - [1. Builtins](#1-builtins-2)
+    - [2. `count()`: Count](#2-count-count)
+    - [3. `sum()`: Sum](#3-sum-sum)
+    - [4. `avg()`: Average](#4-avg-average)
+    - [5. `min()`: Minimum](#5-min-minimum)
+    - [6. `max()`: Maximum](#6-max-maximum)
+    - [7. `stats()`: Stats](#7-stats-stats)
+    - [8. `hist()`: Log2 Histogram](#8-hist-log2-histogram)
+    - [9. `lhist()`: Linear Histogram](#9-lhist-linear-histogram)
+    - [10. `print()`: Print Map](#10-print-print-map)
+
+
+7. output 
+    - [1. `printf()`: Per-Event Output](#1-printf-per-event-output)
+    - [2. `interval`: Interval Output](#2-interval-interval-output)
+    - [3. `hist()`, `printf()`: Histogram Printing](#3-hist-print-histogram-printing)
