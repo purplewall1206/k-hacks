@@ -15,19 +15,6 @@ static struct kprobe kp = {
 	.symbol_name = symbol,
 };
 
-struct my_data {
-	ktime_t entry_stamp;
-};
-
-static int entry_handler(struct kretprobe_instance *ri, struct pt_regs *regs)
-{
-	struct my_data *data;
-
-	if (!current->mm) return 1;
-
-	data = (struct my_data *)
-}
-
 /* kprobe pre_handler: called just before the probed instruction is executed */
 static int handler_pre(struct kprobe *p, struct pt_regs *regs)
 {
