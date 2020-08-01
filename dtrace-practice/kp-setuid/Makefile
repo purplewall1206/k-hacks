@@ -1,4 +1,4 @@
-obj-m := kp-setuid.o
+obj-m := kp-setuid.o  kretprobe_example.o
 KDIR := /lib/modules/$(shell uname -r)/build
 PWD := $(shell pwd)
 
