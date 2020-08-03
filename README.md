@@ -9,3 +9,7 @@ kernel hack samples collection
 `sudo gdb vmlinux /proc/kcore`
 
 kcore相当于一个物理内存的备份
+
+## Compile kernel with debug info
+
+kernel hacking  ->  compile-time checks and compiler options  -> Compile the kernel with debug info(GDB scripts may leads to compile failure)
