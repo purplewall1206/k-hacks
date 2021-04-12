@@ -15,6 +15,8 @@ sudo bpftrace -e 'tracepoint:syscalls:sys_enter_execve { printf ("filename: %s\n
 
 sudo bpftrace -e 'kretprobe:kmem_cache_alloc { printf("kmem_cache_alloc: %016lx\n", retval); }'
 
+sudo bpftrace -e 'kretprobe:alloc_pages_current { printf("alloc_pages_current: %016lx\n", retval); }'
+
 sudo bpftrace -l | grep execve
     # tracepoint:syscalls:sys_enter_execve
     # tracepoint:syscalls:sys_exit_execve
