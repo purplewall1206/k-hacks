@@ -17,6 +17,11 @@ sudo bpftrace -e 'kretprobe:kmem_cache_alloc { printf("kmem_cache_alloc: %016lx\
 
 sudo bpftrace -e 'kretprobe:alloc_pages_current { printf("alloc_pages_current: %016lx\n", retval); }'
 
+sudo bpftrace -e 'kretprobe:__alloc_pages_nodemask { printf("__alloc_pages_nodemask: %016lx\n", retval); } '
+sudo bpftrace -e 'kretprobe:__alloc_pages_nodemask { printf("__alloc_pages_nodemask: %016lx\n", (struct page*)retval); } '
+
+sudo bpftrace -e 'kretprobe:__alloc_pages_nodemask { printf("__alloc_pages_nodemask: %016lx\n", retval); } kretprobe:alloc_pages_current { printf("alloc_pages_current: %016lx\n", retval); }'
+
 sudo bpftrace -l | grep execve
     # tracepoint:syscalls:sys_enter_execve
     # tracepoint:syscalls:sys_exit_execve
@@ -57,3 +62,9 @@ sudo bpftrace -e 'tracepoint:syscalls:sys_enter_execve
                 tracepoint:syscalls:sys_enter_exit_group
                 { printf ("sys_enter_exit_group PID %d\n",
                  pid); }'
+sudo bpftrace --include /lib/modules/5.4.108-1-MANJARO/build/include/linux/mm_types.h -e 
+'kretprobe:__alloc_pages_nodemask 
+{ 
+  printf("__alloc_pages_nodemask: %016lx\n", page_address(retval)); 
+  
+} '

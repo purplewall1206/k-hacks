@@ -1,11 +1,9 @@
-#include <linux/mm_types.h>
 #include <linux/mm.h>
-#include <asm-generic/page.h>
-
+#include <linux/mm_types.h>
 
 kretprobe:alloc_pages_current 
 { 
-    printf("alloc_pages_current: %016lx\n", page_to_pfn(*retval)); 
+   printf("alloc_pages_current: %016lx\n", buf(retval, 64)); 
 }
 
-这里需要安装linux header
+
