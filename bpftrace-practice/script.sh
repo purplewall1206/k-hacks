@@ -1,4 +1,4 @@
-ebpf不能调用内核函数，只能调用bpf helper！！！！
+# ebpf不能调用内核函数，只能调用bpf helper！！！！
 
 
 sudo bpftrace -vl tracepoint:kmem:kmalloc
