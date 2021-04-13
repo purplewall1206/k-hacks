@@ -1,3 +1,6 @@
+ebpf不能调用内核函数，只能调用bpf helper！！！！
+
+
 sudo bpftrace -vl tracepoint:kmem:kmalloc
 sudo bpftrace -e 'tracepoint:kmem:kmalloc { printf("%016lx\n", args->ptr); }'
 sudo bpftrace -e 'tracepoint:kmem:kmalloc { @bytes_alloc = hist(args->bytes_alloc) }'
