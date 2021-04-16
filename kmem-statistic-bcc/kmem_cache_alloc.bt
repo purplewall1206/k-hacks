@@ -1,0 +1,16 @@
+
+tracepoint:kmem:kmem_cache_alloc /(((args->call_site << 32) >> 32) != 0xc0c9a02b) && (((args->call_site << 32) >> 32) != 0xc0ca7bd8)/
+{
+
+    //printf ("callsite: %016lx   %s\n", args->call_site, ksym(args->call_site));
+    //printf ("    ptr : %016lx\n", args->ptr);
+    //printf ("    bytes_req: %u\n", args->bytes_req);
+    //printf ("    bytes_alloc: %u\n", args->bytes_alloc);
+    //printf ("    gfp: %lx\n", args->gfp_flags);
+    @[ksym(args->call_site)] = count();
+    //$x = kptr((void *)(0xffff800000000000))
+    //printf("%s\n", ksym((args->ptr)));
+    //@[ksym((args->ptr))] = count();
+}
+
+tracepoint:kmem:kmem_cache_alloc_node
