@@ -71,3 +71,14 @@ sudo bpftrace --include /lib/modules/5.4.108-1-MANJARO/build/include/linux/mm_ty
   printf("__alloc_pages_nodemask: %016lx\n", page_address(retval)); 
   
 } '
+
+
+sudo bpftrace -e 'tracepoint:kmem:kmalloc { printf("%s:kmalloc:%lx  %s\n", ksym(args->call_site), args->ptr, kstack(5));}   '
+
+sudo bpftrace -e 'kretprobe:__kmalloc { printf("%s:__kmalloc:%lx\n", func, retval);}'
+
+sudo bpftrace -e 'kretprobe:kmem_cache_alloc_trace { printf("%s:kmem_cache_alloc_trace:%lx\n", func, retval);}'
+
+sudo bpftrace -e 'tracepoint:kmem:kmalloc { printf("%s:kmalloc:%lx\n", ksym(args->call_site), args->ptr);}   kretprobe:__kmalloc { printf("%s:__kmalloc:%lx\n", func, retval);} kretprobe:kmem_cache_alloc_trace { printf("%s:kmem_cache_alloc_trace:%lx\n", func, retval);}'
+
+sudo bpftrace -e 'tracepoint:kmem:kmalloc { printf("%s:kmalloc:%lx  %s\n", ksym(args->call_site), args->ptr, kstack(5));}   kretprobe:__kmalloc { printf("%s:__kmalloc:%lx  %s\n", func, retval, kstack(5));} kretprobe:kmem_cache_alloc_trace { printf("%s:kmem_cache_alloc_trace:%lx  %s\n", func, retval, kstack(5));}'
