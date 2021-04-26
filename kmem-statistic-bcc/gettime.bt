@@ -1,0 +1,3 @@
+BEGIN { @start = nsecs; }
+
+kprobe:do_nanosleep /@start != 0/ { printf("at %d ms: sleep\n", (nsecs - @start) / 1000000); }
